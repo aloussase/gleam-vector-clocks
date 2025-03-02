@@ -9,7 +9,7 @@ last-write wins conflict resolution (as is default in Riak) is not possible.
 
 Adding timestamps is easy and is left as an exercise for the reader.
 
-> [!TODO]
+> [!TIP]
 > Add a visualization or something
 
 ## License
