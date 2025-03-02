@@ -1,24 +1,17 @@
 # vector_clocks
 
-[![Package Version](https://img.shields.io/hexpm/v/vector_clocks)](https://hex.pm/packages/vector_clocks)
-[![Hex Docs](https://img.shields.io/badge/hex-docs-ffaff3)](https://hexdocs.pm/vector_clocks/)
+This is a partial port of [Riak's vector
+clocks](https://github.com/basho/riak_core/blob/develop/src/vclock.erl) to
+Gleam.
 
-```sh
-gleam add vector_clocks@1
-```
-```gleam
-import vector_clocks
+Features such as prunning and timestamps are missing. This means that
+last-write wins conflict resolution (as is default in Riak) is not possible.
 
-pub fn main() {
-  // TODO: An example of the project in use
-}
-```
+Adding timestamps is easy and is left as an exercise for the reader.
 
-Further documentation can be found at <https://hexdocs.pm/vector_clocks>.
+> [!TODO]
+> Add a visualization or something
 
-## Development
+## License
+MIT
 
-```sh
-gleam run   # Run the project
-gleam test  # Run the tests
-```
