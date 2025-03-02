@@ -56,8 +56,7 @@ fn merge2(vclocks: List(Vclock), vclock: Vclock) -> Vclock {
       merge2(
         rest,
         merge3(
-          aclock
-            |> list.sort(fn(a, b) { int.compare(a.counter, b.counter) }),
+          list.sort(aclock, fn(a, b) { int.compare(a.counter, b.counter) }),
           vclock,
           [],
         ),
@@ -68,8 +67,8 @@ fn merge2(vclocks: List(Vclock), vclock: Vclock) -> Vclock {
 fn merge3(v, n, acc) -> Vclock {
   case v, n {
     [], [] -> acc |> list.reverse
-    [], n -> acc |> list.append(n) |> list.reverse
-    v, [] -> acc |> list.append(v) |> list.reverse
+    [], n -> acc |> list.append(n)
+    v, [] -> acc |> list.append(v)
     [Dot(node_v, ctr1) as nct1, ..rest_v], [Dot(node_n, ctr2) as nct2, ..rest_n]
     -> {
       case string.compare(node_v, node_n) {
@@ -90,7 +89,7 @@ fn merge3(v, n, acc) -> Vclock {
   }
 }
 
-pub fn increment(node: Node, vclock: Vclock) -> Vclock {
+pub fn increment(vclock: Vclock, node: Node) -> Vclock {
   let new_dot =
     list.find_map(vclock, fn(dot) {
       let Dot(node_, ctr) = dot
@@ -104,4 +103,25 @@ pub fn increment(node: Node, vclock: Vclock) -> Vclock {
   let new_vclock = list.filter(vclock, fn(dot) { dot.node != node })
 
   [new_dot, ..new_vclock]
+}
+
+pub fn get_counter(vclock: Vclock, node: Node) -> Int {
+  vclock
+  |> list.find_map(fn(dot) {
+    case node == dot.node {
+      True -> Ok(dot.counter)
+      _ -> Error(Nil)
+    }
+  })
+  |> result.unwrap(0)
+}
+
+pub fn all_nodes(vclock: Vclock) -> List(Node) {
+  vclock
+  |> list.map(fn(dot) { dot.node })
+}
+
+pub fn get_dot(vclock: Vclock, node: Node) -> Result(Dot, Nil) {
+  vclock
+  |> list.find(fn(dot) { node == dot.node })
 }
